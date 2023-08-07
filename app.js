@@ -8,6 +8,9 @@ const Post = require("./models/Post");
 const fileUpload = require("express-fileupload");
 const methodOverride = require('method-override');
 
+const pageControllers = require("./controllers/pageControllers");
+const postControllers = require("./controllers/postControllers");
+
 
 //Connect DB
 mongoose.connect("mongodb://localhost/cleanblog-test-db", {
@@ -28,52 +31,15 @@ app.use(
   })
 );
 
-app.get("/", async (req, res) => {
-  const posts = await Post.find({});
-  res.render("index", {
-    posts,
-  });
-});
+app.get("/", pageControllers.getAllPost);
+app.get("/posts/:id", pageControllers.getPost);
+app.get("/about", pageControllers.getAboutPage);
+app.get("/add_post", pageControllers.getAddPage);
+app.get("/posts/edit/:id", pageControllers.getEdit);
 
-app.get("/posts/:id", async (req, res) => {
-  const post = await Post.findById(req.params.id);
-  res.render("post", {
-    post,
-  });
-});
-
-app.get("/about", (req, res) => {
-  res.render("about");
-});
-app.get("/add_post", (req, res) => {
-  res.render("add_post");
-});
-
-app.post("/posts", async (req, res) => {
-  await Post.create(req.body);
-  res.redirect("/");
-});
-
-app.get("/posts/edit/:id", async (req, res) => {
-  const post = await Post.findOne({ _id: req.params.id });
-  res.render("edit", {
-    post,
-  });
-});
-
-app.put("/posts/:id", async (req, res) => {
-  const post = await Post.findOne({ _id: req.params.id });
-  post.title = req.body.title;
-  post.description = req.body.description;
-  post.save();
-
-  res.redirect(`/posts/${req.params.id}`);
-});
-
-app.delete('/posts/:id', async (req, res) => {
-  await Post.findByIdAndRemove(req.params.id);
-  res.redirect('/');
-});
+app.post("/posts", postControllers.getAddPost);
+app.put("/posts/:id", postControllers.getUpdatePost);
+app.delete('/posts/:id', postControllers.getDeletePost);
 
 const port = 4000;
 app.listen(port, () => {
