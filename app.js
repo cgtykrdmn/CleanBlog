@@ -6,17 +6,26 @@ const exp = require("constants");
 const app = express();
 const Post = require("./models/Post");
 const fileUpload = require("express-fileupload");
-const methodOverride = require('method-override');
+const methodOverride = require("method-override");
 
 const pageControllers = require("./controllers/pageControllers");
 const postControllers = require("./controllers/postControllers");
 
-
 //Connect DB
-mongoose.connect("mongodb://localhost/cleanblog-test-db", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose
+  .connect(
+    "mongodb+srv://cgtykrdmn:ck04062214@cluster0.fovsqpa.mongodb.net/clean-blog-db?retryWrites=true&w=majority",
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
+  )
+  .then(() => {
+    console.log("DB Connected!");
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
 app.set("view engine", "ejs");
 
@@ -39,9 +48,9 @@ app.get("/posts/edit/:id", pageControllers.getEdit);
 
 app.post("/posts", postControllers.getAddPost);
 app.put("/posts/:id", postControllers.getUpdatePost);
-app.delete('/posts/:id', postControllers.getDeletePost);
+app.delete("/posts/:id", postControllers.getDeletePost);
 
-const port = 4000;
+const port = process.env.PORT || 4000;
 app.listen(port, () => {
   console.log(`${port} has been started.`);
 });
