@@ -14,7 +14,7 @@ const postControllers = require("./controllers/postControllers");
 //Connect DB
 mongoose
   .connect(
-    "mongodb+srv://cgtykrdmn:ck04062214@cluster0.fovsqpa.mongodb.net/clean-blog-db?retryWrites=true&w=majority",
+    "mongodb+srv://<yourUsername>:<yourPassword>@cluster0.fovsqpa.mongodb.net/clean-blog-db?retryWrites=true&w=majority",
     {
       useNewUrlParser: true,
       useUnifiedTopology: true,
